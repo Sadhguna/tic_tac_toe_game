@@ -20,6 +20,7 @@ public class tic_toc_toe_3_3 {
 		board = new Board(player1.get_player_symbol(),player2.get_player_symbol());
 		int status = Board.INVALID;
 		boolean turn = true;
+		board.print_array();
 		while(status == Board.INVALID || status == Board.INCOMPLETE) {
 			if(turn) {
 				System.out.println("1 player turn");
@@ -53,7 +54,6 @@ public class tic_toc_toe_3_3 {
 			System.out.println("draw");
 		}
 	}
-
 	private Player take_input( int x) {
 		Scanner s = new Scanner(System.in);	
 		System.out.println("enter player "+ x +" name");		
@@ -94,7 +94,7 @@ public class tic_toc_toe_3_3 {
 	}
 	class Board {
 
-		char[][] board = new char[3][3];
+		char[][] board = new char[4][4];
 		int count=0;
 		char p1symbol;
 		char p2symbol;
@@ -105,8 +105,15 @@ public class tic_toc_toe_3_3 {
 		public static int DRAW = 3 ;
 		public static int INCOMPLETE=4 ;
 		public Board(char p1symbol,char p2symbol) {
-			for(int i = 0;i<3;i++) {
-				for(int j = 0;j<3;j++) {
+			for(int i = 0;i<4;i++) {
+				for(int j = 0;j<4;j++) {
+					if(i == 0) {
+						board[i][j] = (char) (48+j);
+					}
+					else if(j == 0) {
+						board[i][j] = (char) (48+i);
+					}
+					else	
 					board[i][j] = empty;
 				}
 			}
@@ -122,28 +129,26 @@ public class tic_toc_toe_3_3 {
 			}
 		}
 		public int move(int i, int j, char symbol) {
-			if(i>2 || j>2 || i<0 || j<0 || board[i][j] != empty) {
+			if(i>3 || j>3 || i<1 || j<1 || board[i][j] != empty) {
 				return INVALID;
 			}
 			board[i][j] = symbol;
 			count++;
-			if(board[i][0] == board[i][1] && board[i][1] == board[i][2]) {
+			if(board[i][1] == board[i][2] && board[i][2] == board[i][3]) {
 				return symbol == p1symbol ? PLAYER1_WINS : PLAYER2_WINS;
 			}
-			if(board[0][j] == board[1][j] && board[1][j] == board[2][j]) {
+			if(board[1][j] == board[2][j] && board[1][j] == board[3][j]) {
 				return symbol == p1symbol ? PLAYER1_WINS : PLAYER2_WINS;
 			}
-			if(board[1][1] != empty && board[1][1] == board[2][2] && board[0][0] == board[2][2]) {
+			if(board[2][2] != empty && board[1][1] == board[2][2] && board[3][3] == board[2][2]) {
 				return symbol == p1symbol ? PLAYER1_WINS : PLAYER2_WINS;
 			}
-			if(board[1][1] != empty && board[1][1] == board[0][2] && board[1][1] == board[2][0]) {
+			if(board[2][2] != empty && board[2][2] == board[1][3] && board[3][1] == board[2][2]) {
 				return symbol == p1symbol ? PLAYER1_WINS : PLAYER2_WINS;
 			}
 			if(count == 9) {
 				return DRAW;
 			}
 			return INCOMPLETE;
-
 		}
-
 	}
